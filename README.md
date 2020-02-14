@@ -2,10 +2,12 @@
 Install the `pdflatex` tool, which is necessary for compiling into PDF
 
 ### Basic installation
+```
 git clone https://github.com/pmengelbert/timplate.git
 cd timplate
 go build .
 sudo cp timplate /usr/local/bin
+```
 
 ### Basic usage
 You'll need a yaml file in the following format:

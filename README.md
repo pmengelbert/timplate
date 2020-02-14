@@ -1,8 +1,16 @@
 ## Timplate
-A simple tool that converts a timesheet written in yaml to a nice-looking PDF timesheet, written in golang.  Uses the `pdflatex` tool to compile a PDF. Never use excel again.
+A simple tool that converts a timesheet written in yaml to a nice-looking latex (.tex) document, written in golang.  
+Intended for use with the the `pdflatex` tool, which will compile a PDF from the tex file. Never use excel again.
+It will auto-calculate your total hours and your pay.
 
 ### Dependencies
-Install the `pdflatex` tool, which is necessary for compiling into PDF
+When compiling to pdf, you will need to install the `pdflatex` tool, usually found in the `texlive` package. 
+You will also need the `enumitem.sty` latex package, which can be installed like this:
+```
+mkdir -p ~/texmf/tex/latex/enumitem
+curl http://ctan.math.washington.edu/tex-archive/macros/latex/contrib/enumitem/enumitem.sty -s > enumitem.sty
+mv enumitem.sty ~/texmf/tex/latex/enumitem/enumitem.sty
+```
 
 ### Basic installation
 ```
@@ -40,5 +48,11 @@ Then, simply run:
 ```
 timplate <filename.yaml>
 ```
-This will generate `timesheet.pdf` :
+
+This will generate `timesheet.tex`, which can be used with pdflatex:
+```
+pdflatex timesheet.tex
+```
+
+pdflatex will generate timesheet.pdf, which will look like this:
 ![](timplate.png)

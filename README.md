@@ -1,5 +1,5 @@
 ## Timplate
-A simple tool that converts a timesheet written in yaml to a nice-looking PDF timesheet, written in golang.  Uses the `pdflatex` tool to compile a PDF. Never use Excel again.
+A simple tool that converts a timesheet written in yaml to a nice-looking PDF timesheet, written in golang.  Uses the `pdflatex` tool to compile a PDF. Never use excel again.
 
 ### Dependencies
 Install the `pdflatex` tool, which is necessary for compiling into PDF
@@ -40,4 +40,5 @@ Then, simply run:
 ```
 timplate <filename.yaml>
 ```
-This will generate `timesheet.pdf`
+This will generate `timesheet.pdf` :
+![](timplate.png)

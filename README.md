@@ -35,4 +35,4 @@ Then, simply run:
 ```
 timplate <filename.yaml>
 ```
-This will generate timesheet.pdf
+This will generate `timesheet.pdf`

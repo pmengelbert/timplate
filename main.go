@@ -120,11 +120,11 @@ func main() {
 	t.Execute(buf, s)
 	outfile := "timesheet.tex"
 	ioutil.WriteFile(outfile, buf.Bytes(), 0644)
-	c := exec.Command("pdflatex", outfile)
-	err = c.Run()
-	if err != nil {
-		fmt.Println(err)
-	}
-	str, err := c.Output()
-	fmt.Println(string(str))
+	//c := exec.Command("pdflatex", outfile)
+	//err = c.Run()
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
+	//str, err := c.Output()
+	//fmt.Println(string(str))
 }

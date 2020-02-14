@@ -3,12 +3,12 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"html/template"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"strconv"
 	"strings"
+	"text/template"
 
 	"github.com/ghodss/yaml"
 )

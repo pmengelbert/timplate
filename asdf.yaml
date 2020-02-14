@@ -1,0 +1,85 @@
+name: Peter Engelbert
+startDate: Feb 03, 2020
+endDate: Feb 13, 2020
+records:
+    - Date: 02/03/20
+      Times: 
+          - 1030-1915
+      Hours: 8.75
+      Description: 
+        - In office
+    - Date: 02/04/20
+      Times: 
+        - 1030-1830
+      Hours: 8
+      Description: 
+            - deployed postgres server
+            - created new endpoints to add users to the database, remove users, and show all users
+            - made changes for OCI PR
+    - Date: 02/05/20
+      Times: 
+        - 0945-1600
+      Hours: 8.25
+      Description: 
+            - In office
+    - Date: 02/06/20
+      Times: 
+        - 1100-1230
+        - 1430-1700
+      Hours: 4
+      Description: 
+            - developer experience, troubleshooting docker-compose
+            - Hide and show tokens
+    - Date: 02/07/20
+      Times: 
+        - 1030-1830
+        - 2330-0130
+      Hours: 10
+      Description: 
+            - Researched Auth0 sessions
+            - Copy token to clipboard
+            - Reset token (required new endpoint)
+            - Created /v2/ passthru endpoints. OCI tests pass at 100%
+            - Created /auth/repos endpoint to list repos
+            - Don’t understand how to identify what user is logged in
+            - Research JavaScript promises, fetch, and async/await
+    - Date: 02/08/20
+      Times: 
+        - 1445-1800
+      Hours: 3.25
+      Description: 
+            - Worked on UI, React Router
+
+    - Date: 02/09/20
+      Times: 
+        - 1400-2130
+        - 2330-0400
+      Hours: 12
+      Description: 
+            - Built out UI, added endpoints as necessary
+            - Bug fixes and troubleshooting to get it all working in the cloud
+    - Date: 02/10/20
+      Times: 
+        - 1000-1800
+      Hours: 8.5
+      Description: 
+            - In office – refactoring backend
+    - Date: 02/11/20
+      Times: 
+        - 1130-1800
+      Hours: 5
+      Description: 
+            - UI tweaks, aesthetics
+            - Auth0 – displaying only the logged-in user’s information
+    - Date: 02/12/20
+      Times: 
+        - 1000-1800
+      Hours: 8
+      Description: 
+            - In office
+    - Date: 02/13/20
+      Times: 
+        - 1400-1815
+      Hours: 4.25
+      Description: 
+            - hi

@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"strconv"
+	"strings"
 
 	"github.com/ghodss/yaml"
 )
@@ -104,6 +105,14 @@ func main() {
 
 	var s Sheet
 	yaml.Unmarshal(file, &s)
+	for i := range s.Records {
+		for j, v := range s.Records[i].Description {
+			a := strings.Split(v, " ")
+			a[0] = strings.Title(a[0])
+			str := strings.Join(a, " ")
+			s.Records[i].Description[j] = str
+		}
+	}
 	t := template.Must(template.New("timesheet").
 		Delims("<<", ">>").
 		Parse(timesheet))

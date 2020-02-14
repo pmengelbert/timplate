@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+  "flag"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -29,6 +30,10 @@ type (
 		EndDate   string   `json:"endDate"`
 		Records   []Record `json:"records"`
 	}
+)
+
+var (
+  output = flag.String("o", "timesheet.tex", "the resulting .tex file")
 )
 
 func (s Sheet) TotalHours() float64 {
@@ -92,9 +97,10 @@ const timesheet = `
 `
 
 func main() {
+  flag.Parse()
 	filename := "timesheet.yaml"
-	if len(os.Args) > 1 {
-		filename = os.Args[1]
+	if len(flag.Args()) >= 1 {
+		filename = flag.Args()[0]
 	}
 	file, err := ioutil.ReadFile(filename)
 	if err != nil {
@@ -117,8 +123,7 @@ func main() {
 		Parse(timesheet))
 	buf := new(bytes.Buffer)
 	t.Execute(buf, s)
-	outfile := "timesheet.tex"
-	ioutil.WriteFile(outfile, buf.Bytes(), 0644)
+	ioutil.WriteFile(*output, buf.Bytes(), 0644)
 	//c := exec.Command("pdflatex", outfile)
 	//err = c.Run()
 	//if err != nil {

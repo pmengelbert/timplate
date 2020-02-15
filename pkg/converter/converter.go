@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"strings"
 	"text/template"
 
 	"github.com/ghodss/yaml"
@@ -88,5 +89,20 @@ func (c *Converter) CompilePDF() error {
 	}
 
 	fmt.Println(string(str))
+	err = c.cleanUpIntermediateFiles()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *Converter) cleanUpIntermediateFiles() error {
+	baseName := strings.Split(c.Outfile, ".")[0]
+	for _, s := range []string{".aux", ".log", ".tex"} {
+		os.Remove(baseName + s)
+	}
+	os.Remove(c.Outfile)
+
 	return nil
 }

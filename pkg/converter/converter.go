@@ -9,7 +9,7 @@ import (
 	"text/template"
 
 	"github.com/ghodss/yaml"
-	"github.com/pmengelbert/timplate/timesheet"
+	"github.com/pmengelbert/timplate/pkg/timesheet"
 )
 
 type (

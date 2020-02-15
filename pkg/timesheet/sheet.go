@@ -1,5 +1,12 @@
 package timesheet
 
+import (
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+)
+
 type (
 	BulletList []string
 

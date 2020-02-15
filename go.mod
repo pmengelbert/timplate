@@ -1,4 +1,4 @@
-module timplate
+module github.com/pmengelbert/timplate
 
 go 1.13
 

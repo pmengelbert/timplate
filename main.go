@@ -34,8 +34,9 @@ type (
 )
 
 var (
-	output  = flag.String("o", "timesheet.tex", "the resulting .tex file")
 	compile = flag.Bool("c", false, "compile using pdflatex (use only if installed)")
+	help    = flag.Bool("h", false, "show a help message, without running the program")
+	output  = flag.String("o", "timesheet.tex", "the resulting .tex file")
 )
 
 func (s Sheet) TotalHours() float64 {
@@ -100,6 +101,15 @@ const timesheet = `
 
 func main() {
 	flag.Parse()
+	if *help {
+		fmt.Printf(`Usage: timplate [OPTIONS] <infile.yaml>
+OPTIONS:
+	-o outfile.tex 	-- produce outfile.tex
+	-c		-- compile with pdflatex (if installed)
+	-h		-- show this help message
+`)
+		os.Exit(0)
+	}
 	infile := "timesheet.yaml"
 	if len(flag.Args()) >= 1 {
 		infile = flag.Args()[0]

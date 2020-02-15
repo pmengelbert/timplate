@@ -53,19 +53,12 @@ func (s Sheet) TotalHours() float64 {
 	return sum
 }
 
-func (s Sheet) TotalHoursString() string {
-	return fmt.Sprintf("%.2f", s.TotalHours())
-}
-
 func (s Sheet) TotalPay() float64 {
 	return s.TotalHours() * float64(s.Rate)
 }
 
-func (s Sheet) TotalPayString() string {
-	return fmt.Sprintf("%.2f", s.TotalPay())
-}
-
-const timesheet = `
+const (
+	timesheet = `
 \documentclass[10pt,twoside,letterpaper]{article}
 \usepackage{enumitem}
 \setlist[2]{nosep}
@@ -93,28 +86,33 @@ const timesheet = `
 			\\ \hline
 		<< end ->>
 		\hline
-		 & \textbf{Total:} & \textbf{<< .TotalHoursString >>} @ << .Rate ->>/hr & \textbf{Pay: \$<<- .TotalPayString >>} \\ \hline
+		 & \textbf{Total:} & \textbf{<< .TotalHours | printf "%.2f"  >>} @ << .Rate ->>/hr & \textbf{Pay: \$<<- .TotalPay | printf "%.2f" >>} \\ \hline
 \end{longtable}
 \end{center}
 \end{document}
 `
 
-func main() {
-	flag.Parse()
-	if *help {
-		fmt.Printf(`Usage: timplate [OPTIONS] <infile.yaml>
+	helpMessage = `Usage: timplate [OPTIONS] <infile.yaml>
 OPTIONS:
 	-o outfile.tex 	-- produce outfile.tex
 	-c		-- compile with pdflatex (if installed)
 	-h		-- show this help message
-`)
+`
+)
+
+func main() {
+	flag.Parse()
+	if *help {
+		fmt.Printf(helpMessage)
 		os.Exit(0)
 	}
-	infile := "timesheet.yaml"
-	if len(flag.Args()) >= 1 {
-		infile = flag.Args()[0]
+
+	if len(flag.Args()) == 0 {
+		fmt.Printf("no input file specified")
+		os.Exit(1)
 	}
-	file, err := ioutil.ReadFile(infile)
+
+	file, err := ioutil.ReadFile(flag.Args()[0])
 	if err != nil {
 		fmt.Println("error reading file")
 		os.Exit(1)
@@ -127,18 +125,17 @@ OPTIONS:
 	t := template.Must(template.New("timesheet").
 		Delims("<<", ">>").
 		Parse(timesheet))
+
 	buf := new(bytes.Buffer)
 	t.Execute(buf, s)
-	ioutil.WriteFile(*output, buf.Bytes(), 0644)
-	if *compile {
-		c := exec.Command("pdflatex", *output)
-		str, err := c.Output()
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+	err = ioutil.WriteFile(*output, buf.Bytes(), 0644)
+	if err != nil {
+		fmt.Printf("error writing file")
+		os.Exit(1)
+	}
 
-		fmt.Println(string(str))
+	if *compile {
+		compilePDF()
 	}
 }
 
@@ -151,4 +148,15 @@ func (s *Sheet) capitalizeDescriptions() {
 			s.Records[i].Description[j] = str
 		}
 	}
+}
+
+func compilePDF() {
+	c := exec.Command("pdflatex", *output)
+	str, err := c.Output()
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	fmt.Println(string(str))
 }

@@ -5,26 +5,21 @@ It will auto-calculate your total hours and your pay.
 
 ### Dependencies
 When compiling to pdf, you will need to install the `pdflatex` tool, usually found in the `texlive` package. 
-You will also need the `enumitem.sty` latex package, which can be installed like this:
-```
-mkdir -p ~/texmf/tex/latex/enumitem
-curl http://ctan.math.washington.edu/tex-archive/macros/latex/contrib/enumitem/enumitem.sty -s > enumitem.sty
-mv enumitem.sty ~/texmf/tex/latex/enumitem/enumitem.sty
-```
+You will also need the `enumitem.sty` latex package, which is provided in this repository.
 
 ### Basic installation
 ```
 git clone https://github.com/pmengelbert/timplate.git
 cd timplate
-go build .
-sudo cp timplate /usr/local/bin
+make build
+sudo make install
 ```
 
 ### Basic usage
 You'll need a yaml file in the following format:
 ```
-name: Peter Engelbert
-rate: 32
+name: Arthur Dent
+rate: 48
 startDate: Feb 03, 2020
 endDate: Feb 13, 2020
 records:
@@ -54,5 +49,10 @@ This will generate `timesheet.tex`, which can be used with pdflatex:
 pdflatex timesheet.tex
 ```
 
-pdflatex will generate timesheet.pdf, which will look like this:
+Alternatievely, if you have `pdflatex` installed, you can generate the pdf in one go like so:
+```
+timplate -c <filename.yaml>
+```
+
+`pdflatex` will generate timesheet.pdf, which will look like this:
 ![](timplate.png)

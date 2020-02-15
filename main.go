@@ -2,10 +2,11 @@ package main
 
 import (
 	"bytes"
-  "flag"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"strconv"
 	"strings"
 	"text/template"
@@ -33,7 +34,8 @@ type (
 )
 
 var (
-  output = flag.String("o", "timesheet.tex", "the resulting .tex file")
+	output  = flag.String("o", "timesheet.tex", "the resulting .tex file")
+	compile = flag.Bool("c", false, "compile using pdflatex (use only if installed)")
 )
 
 func (s Sheet) TotalHours() float64 {
@@ -97,12 +99,12 @@ const timesheet = `
 `
 
 func main() {
-  flag.Parse()
-	filename := "timesheet.yaml"
+	flag.Parse()
+	infile := "timesheet.yaml"
 	if len(flag.Args()) >= 1 {
-		filename = flag.Args()[0]
+		infile = flag.Args()[0]
 	}
-	file, err := ioutil.ReadFile(filename)
+	file, err := ioutil.ReadFile(infile)
 	if err != nil {
 		fmt.Println("error reading file")
 		os.Exit(1)
@@ -110,6 +112,27 @@ func main() {
 
 	var s Sheet
 	yaml.Unmarshal(file, &s)
+	s.capitalizeDescriptions()
+
+	t := template.Must(template.New("timesheet").
+		Delims("<<", ">>").
+		Parse(timesheet))
+	buf := new(bytes.Buffer)
+	t.Execute(buf, s)
+	ioutil.WriteFile(*output, buf.Bytes(), 0644)
+	if *compile {
+		c := exec.Command("pdflatex", *output)
+		str, err := c.Output()
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+		fmt.Println(string(str))
+	}
+}
+
+func (s *Sheet) capitalizeDescriptions() {
 	for i := range s.Records {
 		for j, v := range s.Records[i].Description {
 			a := strings.Split(v, " ")
@@ -118,17 +141,4 @@ func main() {
 			s.Records[i].Description[j] = str
 		}
 	}
-	t := template.Must(template.New("timesheet").
-		Delims("<<", ">>").
-		Parse(timesheet))
-	buf := new(bytes.Buffer)
-	t.Execute(buf, s)
-	ioutil.WriteFile(*output, buf.Bytes(), 0644)
-	//c := exec.Command("pdflatex", outfile)
-	//err = c.Run()
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
-	//str, err := c.Output()
-	//fmt.Println(string(str))
 }

@@ -54,5 +54,5 @@ Alternatievely, if you have `pdflatex` installed, you can generate the pdf in on
 timplate -c <filename.yaml>
 ```
 
-`pdflatex` will generate timesheet.pdf, which will look like this:
+This will generate timesheet.pdf, which will look like this:
 ![](timplate.png)

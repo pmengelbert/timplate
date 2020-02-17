@@ -12,20 +12,20 @@ func main() {
 
 	c, err := converter.DefaultConverter(infile(), outfile())
 	if err != nil {
-		fmt.Sprintf("%v", err)
+		fmt.Println(err)
 		os.Exit(1)
 	}
 
 	err = c.SaveOutfile()
 	if err != nil {
-		fmt.Sprintf("%v", err)
+		fmt.Println(err)
 		os.Exit(1)
 	}
 
 	if compileFlagIsOn() {
 		err = c.CompilePDF()
 		if err != nil {
-			fmt.Sprintf("%v", err)
+			fmt.Println(err)
 			os.Exit(1)
 		}
 	}

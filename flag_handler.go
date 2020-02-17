@@ -4,6 +4,11 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
+)
+
+type (
+	arglist []string
 )
 
 const (
@@ -39,9 +44,21 @@ func infile() string {
 }
 
 func outfile() string {
-	return *output
+	if arglist(os.Args).contains("-o") {
+		return *output
+	}
+	return strings.Split(infile(), ".")[0] + ".tex"
 }
 
 func compileFlagIsOn() bool {
 	return *compile
+}
+
+func (al arglist) contains(s string) bool {
+	for _, v := range al {
+		if s == v {
+			return true
+		}
+	}
+	return false
 }

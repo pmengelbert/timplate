@@ -20,6 +20,7 @@ type (
 	Sheet struct {
 		Name      string   `json:"name"`
 		Rate      int      `json:"rate"`
+		TaxRate   float64  `json:"taxRate"`
 		StartDate string   `json:"startDate"`
 		EndDate   string   `json:"endDate"`
 		Records   []Record `json:"records"`
@@ -42,6 +43,10 @@ func (s Sheet) TotalHours() float64 {
 
 func (s Sheet) TotalPay() float64 {
 	return s.TotalHours() * float64(s.Rate)
+}
+
+func (s Sheet) AfterTax() float64 {
+	return s.TotalPay() * (1 - s.TaxRate)
 }
 
 func (s *Sheet) CapitalizeDescriptions() {

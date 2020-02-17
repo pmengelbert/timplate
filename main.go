@@ -29,4 +29,6 @@ func main() {
 			os.Exit(1)
 		}
 	}
+
+	fmt.Printf("After tax earnings: $%.2f\n", c.Sheet.AfterTax())
 }

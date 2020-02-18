@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path"
 	"strings"
 )
 
@@ -47,7 +48,7 @@ func outfile() string {
 	if arglist(os.Args).contains("-o") {
 		return *output
 	}
-	return strings.Split(infile(), ".")[0] + ".tex"
+	return strings.Split(path.Base(infile()), ".")[0] + ".tex"
 }
 
 func compileFlagIsOn() bool {

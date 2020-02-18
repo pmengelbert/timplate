@@ -39,10 +39,13 @@ func DefaultConverter(infile, outfile string) (*Converter, error) {
 	}
 
 	c.parseTemplate()
-	err = c.executeTemplate()
+
+	err = c.parseYaml()
 	if err != nil {
 		return nil, err
 	}
+
+	c.executeTemplate()
 
 	return c, nil
 }
@@ -62,15 +65,44 @@ func (c *Converter) parseTemplate() {
 		Parse(c.TemplateString))
 }
 
-func (c *Converter) executeTemplate() error {
+func (c *Converter) parseYaml() error {
 	err := yaml.Unmarshal(c.InfileText, &c.Sheet)
 	if err != nil {
 		return err
 	}
 
+	for i, r := range c.Sheet.Records {
+		for _, t := range r.Times {
+			a := strings.Split(t, "-")
+			for j := range a {
+				a[j] = strings.TrimSpace(a[j])
+			}
+
+			x, err := timesheet.Parse(a[0])
+			if err != nil {
+				return err
+			}
+
+			y, err := timesheet.Parse(a[1])
+			if err != nil {
+				return err
+			}
+
+			diff := y.Subtract(x)
+			if diff < 0 {
+				return fmt.Errorf("bad time period: %v, %v", x, y)
+			}
+
+			c.Sheet.Records[i].TimeSum += diff
+		}
+	}
+
+	return nil
+}
+
+func (c *Converter) executeTemplate() {
 	c.Sheet.CapitalizeDescriptions()
 	c.Template.Execute(c.Buffer, c.Sheet)
-	return nil
 }
 
 func (c *Converter) SaveOutfile() error {

@@ -28,7 +28,7 @@ const timesheetTemplate = `
 			\\ \hline
 		<< end ->>
 		\hline
-		 & \textbf{Total:} & \textbf{<< .TotalHours2 | printf "%.2f"  >>} @ << .Rate ->>/hr & \textbf{Pay: \$<<- .TotalPay | printf "%.2f" >>} \\ \hline
+		 & \textbf{Total:} & \textbf{<< .TotalHours | printf "%.2f"  >>} @ << .Rate ->>/hr & \textbf{Pay: \$<<- .TotalPay | printf "%.2f" >>} \\ \hline
 \end{longtable}
 \end{center}
 \end{document}

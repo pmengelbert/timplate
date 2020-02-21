@@ -33,20 +33,6 @@ type (
 
 func (s Sheet) TotalHours() float64 {
 	var sum float64
-	for _, v := range s.Records {
-		f, err := strconv.ParseFloat(v.Hours, 64)
-		if err != nil {
-			fmt.Println("Hours provided aren't a number")
-			os.Exit(1)
-		}
-		sum += f
-	}
-
-	return sum
-}
-
-func (s Sheet) TotalHours2() float64 {
-	var sum float64
 	for _, r := range s.Records {
 		sum += float64(r.TimeSum)
 	}

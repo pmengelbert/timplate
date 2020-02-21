@@ -2,7 +2,6 @@ package timesheet
 
 import (
 	"fmt"
-	"os"
 	"regexp"
 	"strconv"
 	"strings"

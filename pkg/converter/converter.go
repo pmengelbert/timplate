@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"regexp"
 	"strings"
 	"text/template"
 
@@ -24,6 +25,8 @@ type (
 		TemplateString string
 	}
 )
+
+var escapeRegex = regexp.MustCompile("([&%$#_{}~\\^])")
 
 func DefaultConverter(infile, outfile string) (*Converter, error) {
 	c := &Converter{
@@ -57,6 +60,7 @@ func (c *Converter) loadInfileText() error {
 		fmt.Println("error reading file")
 		os.Exit(1)
 	}
+	c.InfileText = escapeRegex.ReplaceAll(c.InfileText, []byte("\\$1"))
 	return err
 }
 

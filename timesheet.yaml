@@ -6,28 +6,24 @@ records:
     - date: 02/03/20
       times: 
           - 1030-1915
-      hours: 8.75
       description: 
         - In office
     - date: 02/04/20
       times: 
         - 1030-1830
-      hours: 8
       description: 
-            - deployed postgres server
+            - AUTH0_REDIRECT_DOMAIN
             - created new endpoints to add users to the database, remove users, and show all users
             - made changes for OCI PR
     - date: 02/05/20
       times: 
         - 0945-1600
-      hours: 8.25
       description: 
             - In office
     - date: 02/06/20
       times: 
         - 1100-1230
         - 1430-1700
-      hours: 4
       description: 
             - developer experience, troubleshooting docker-compose
             - Hide and show tokens
@@ -35,7 +31,6 @@ records:
       times: 
         - 1030-1830
         - 2330-0130
-      hours: 10
       description: 
             - Researched Auth0 sessions
             - Copy token to clipboard
@@ -47,7 +42,6 @@ records:
     - date: 02/08/20
       times: 
         - 1445-1800
-      hours: 3.25
       description: 
             - Worked on UI, React Router
 
@@ -55,32 +49,27 @@ records:
       times: 
         - 1400-2130
         - 2330-0400
-      hours: 12
       description: 
             - Built out UI, added endpoints as necessary
             - Bug fixes and troubleshooting to get it all working in the cloud
     - date: 02/10/20
       times: 
         - 1000-1800
-      hours: 8.5
       description: 
             - In office – refactoring backend
     - date: 02/11/20
       times: 
         - 1130-1800
-      hours: 5
       description: 
             - UI tweaks, aesthetics
             - Auth0 – displaying only the logged-in user’s information
     - date: 02/12/20
       times: 
         - 1000-1800
-      hours: 8
       description: 
             - In office
     - date: 02/13/20
       times: 
         - 1400-1815
-      hours: 4.25
       description: 
             - Made repo list sort by last updated

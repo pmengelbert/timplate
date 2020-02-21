@@ -23,6 +23,7 @@ type (
 		Sheet          timesheet.Sheet
 		Template       *template.Template
 		TemplateString string
+		EnumItemString string
 	}
 )
 
@@ -34,6 +35,7 @@ func DefaultConverter(infile, outfile string) (*Converter, error) {
 		Outfile:        outfile,
 		Buffer:         new(bytes.Buffer),
 		TemplateString: timesheetTemplate,
+		EnumItemString: enumitem,
 	}
 
 	err := c.loadInfileText()
@@ -118,6 +120,8 @@ func (c *Converter) SaveOutfile() error {
 }
 
 func (c *Converter) CompilePDF() error {
+	ioutil.WriteFile("enumitem.sty", []byte(c.EnumItemString), 0644)
+
 	cmd := exec.Command("pdflatex", c.Outfile)
 	str, err := cmd.Output()
 	if err != nil {
@@ -139,6 +143,7 @@ func (c *Converter) cleanUpIntermediateFiles() error {
 		os.Remove(baseName + s)
 	}
 	os.Remove(c.Outfile)
+	os.Remove("enumitem.sty")
 
 	return nil
 }

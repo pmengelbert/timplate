@@ -3,7 +3,7 @@ package converter
 const (
 	timesheetTemplate = `
 \documentclass[10pt,twoside,letterpaper]{article}
-\usepackage{enumitem}
+\usepackage{._enumitem}
 \setlist[2]{nosep}
 \usepackage{longtable}
 \usepackage{array}
@@ -49,7 +49,7 @@ const (
 % ~~~~~~~
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{enumitem}[2019/06/20 v3.9 Customized lists]
+\ProvidesPackage{._enumitem}[2019/06/20 v3.9 Customized lists]
 
 % Notes
 % ~~~~~

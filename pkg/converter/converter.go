@@ -16,8 +16,10 @@ import (
 )
 
 const (
-	outDirName  = "._latexFiles/"
-	styFileName = "._enumitem.sty"
+	outDirName                   = "._latexFiles/"
+	styFileName                  = "._enumitem.sty"
+	readWriteFileForThisUserOnly = 0644
+	readWriteDirForThisUserOnly  = 0755
 )
 
 type (
@@ -65,8 +67,7 @@ func (c *Converter) loadInfileText() error {
 	var err error
 	c.InfileText, err = ioutil.ReadFile(c.Infile)
 	if err != nil {
-		fmt.Println("error reading file")
-		os.Exit(1)
+		return fmt.Errorf("error reading file: %s\n", c.Infile)
 	}
 	c.InfileText = escapeRegex.ReplaceAll(c.InfileText, []byte("\\$1"))
 	return err
@@ -80,7 +81,7 @@ func (c *Converter) parseTemplate() {
 func (c *Converter) parseYaml() error {
 	err := yaml.Unmarshal(c.InfileText, &c.Sheet)
 	if err != nil {
-		return err
+		return fmt.Errorf("error parsing yaml: %s\n", err)
 	}
 
 	for i, r := range c.Sheet.Records {
@@ -92,17 +93,17 @@ func (c *Converter) parseYaml() error {
 
 			x, err := timesheet.Parse(a[0])
 			if err != nil {
-				return err
+				return fmt.Errorf("error parsing time from timesheet.yaml: %s\n", a[0])
 			}
 
 			y, err := timesheet.Parse(a[1])
 			if err != nil {
-				return err
+				return fmt.Errorf("error parsing time from timesheet.yaml: %s\n", a[1])
 			}
 
 			diff := y.DifferenceInHours(x)
 			if diff < 0 {
-				return fmt.Errorf("bad time period: %v, %v", x, y)
+				return fmt.Errorf("bad time period: %v, %v\n", x, y)
 			}
 
 			c.Sheet.Records[i].TimeSum += diff
@@ -120,7 +121,7 @@ func (c *Converter) executeTemplate() {
 func (c *Converter) SaveOutfile() error {
 	err := ioutil.WriteFile(c.Outfile, c.Buffer.Bytes(), 0644)
 	if err != nil {
-		return err
+		return fmt.Errorf("Error writing output file\n")
 	}
 	return nil
 }
@@ -134,15 +135,14 @@ func (c *Converter) CompilePDF() error {
 
 	str, err := cmd.Output()
 	if err != nil {
-		fmt.Printf("pdflatex encountered an error\n")
 		c.cleanUpIntermediateFiles()
-		return err
+		return fmt.Errorf("pdflatex encountered an error: %s\n", err)
 	}
 
 	pdfFilename := strings.TrimSuffix(c.Outfile, path.Ext(c.Outfile)) + ".pdf"
 	err = os.Rename(outDirName+pdfFilename, pdfFilename)
 	if err != nil {
-		fmt.Println("error renaming file")
+		fmt.Println("error renaming file\n")
 		return err
 	}
 
@@ -154,9 +154,8 @@ func (c *Converter) CompilePDF() error {
 	}
 
 	os.Remove(c.Outfile)
-
 	if err != nil {
-		return err
+		return fmt.Errorf("error removing file: %s\n", c.Outfile)
 	}
 
 	return nil
@@ -165,12 +164,12 @@ func (c *Converter) CompilePDF() error {
 func (c *Converter) cleanUpIntermediateFiles() error {
 	err := os.RemoveAll(outDirName)
 	if err != nil {
-		return err
+		return fmt.Errorf("error deleting files in %s\n", outDirName)
 	}
 
 	err = os.Remove(styFileName)
 	if err != nil {
-		return err
+		return fmt.Errorf("error deleting file: %s\n", styFileName)
 	}
 
 	return nil

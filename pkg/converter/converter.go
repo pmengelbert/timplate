@@ -6,12 +6,18 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"path"
 	"regexp"
 	"strings"
 	"text/template"
 
 	"github.com/ghodss/yaml"
 	"github.com/pmengelbert/timplate/pkg/timesheet"
+)
+
+const (
+	outDirName  = "._latexFiles/"
+	styFileName = "._enumitem.sty"
 )
 
 type (
@@ -120,16 +126,35 @@ func (c *Converter) SaveOutfile() error {
 }
 
 func (c *Converter) CompilePDF() error {
-	ioutil.WriteFile("enumitem.sty", []byte(c.EnumItemString), 0644)
+	ioutil.WriteFile(styFileName, []byte(c.EnumItemString), 0644)
 
-	cmd := exec.Command("pdflatex", c.Outfile)
+	os.Mkdir(outDirName, 0755)
+	cmd := exec.Command("pdflatex", "-output-directory=._latexFiles",
+		"-halt-on-error", c.Outfile)
+
 	str, err := cmd.Output()
 	if err != nil {
+		fmt.Printf("pdflatex encountered an error\n")
+		c.cleanUpIntermediateFiles()
+		return err
+	}
+
+	pdfFilename := strings.TrimSuffix(c.Outfile, path.Ext(c.Outfile)) + ".pdf"
+	err = os.Rename(outDirName+pdfFilename, pdfFilename)
+	if err != nil {
+		fmt.Println("error renaming file")
 		return err
 	}
 
 	fmt.Println(string(str))
 	err = c.cleanUpIntermediateFiles()
+	if err != nil {
+		fmt.Printf("Was unable to delete intermediate files. Delete them manually in the "+
+			"%s directory.\n", outDirName)
+	}
+
+	os.Remove(c.Outfile)
+
 	if err != nil {
 		return err
 	}
@@ -138,12 +163,15 @@ func (c *Converter) CompilePDF() error {
 }
 
 func (c *Converter) cleanUpIntermediateFiles() error {
-	baseName := strings.Split(c.Outfile, ".")[0]
-	for _, s := range []string{".aux", ".log", ".tex"} {
-		os.Remove(baseName + s)
+	err := os.RemoveAll(outDirName)
+	if err != nil {
+		return err
 	}
-	os.Remove(c.Outfile)
-	os.Remove("enumitem.sty")
+
+	err = os.Remove(styFileName)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

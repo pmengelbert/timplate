@@ -8,7 +8,9 @@ import (
 )
 
 type (
-	Time [2]int8
+	Time struct {
+		Hour, Minute int8
+	}
 
 	BulletList []string
 
@@ -77,8 +79,16 @@ func Parse(t string) (Time, error) {
 		}
 	}
 
-	i, _ := strconv.Atoi(hourString)
-	j, _ := strconv.Atoi(minuteString)
+	i, err := strconv.Atoi(hourString)
+	if err != nil {
+		return Time{}, err
+	}
+
+	j, err := strconv.Atoi(minuteString)
+	if err != nil {
+		return Time{}, err
+	}
+
 	hours += int8(i)
 	minutes += int8(j)
 
@@ -89,18 +99,18 @@ func Parse(t string) (Time, error) {
 	return Time{hours, minutes}, nil
 }
 
-func (t1 Time) Subtract(t2 Time) float32 {
-	minDiff := t1[1] - t2[1]
-	if t1[0] < t2[0] {
-		t1[0] += 24
+func (t1 Time) DifferenceInHours(t2 Time) float32 {
+	minDiff := t1.Minute - t2.Minute
+	if t1.Hour < t2.Hour {
+		t1.Hour += 24
 	}
 
 	if minDiff < 0 {
 		minDiff += 60
-		t1[0]--
+		t1.Hour--
 	}
 
-	hrDiff := t1[0] - t2[0]
+	hrDiff := t1.Hour - t2.Hour
 	minFraction := float32(minDiff) / 60.0
 	return float32(hrDiff) + minFraction
 }

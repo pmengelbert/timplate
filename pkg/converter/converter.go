@@ -94,7 +94,7 @@ func (c *Converter) parseYaml() error {
 				return err
 			}
 
-			diff := y.Subtract(x)
+			diff := y.DifferenceInHours(x)
 			if diff < 0 {
 				return fmt.Errorf("bad time period: %v, %v", x, y)
 			}

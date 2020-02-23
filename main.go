@@ -30,5 +30,7 @@ func main() {
 		}
 	}
 
-	fmt.Printf("After tax earnings: $%.2f\n", c.Sheet.AfterTax())
+	fmt.Printf("Total hours:\t\t%.2f\n", c.Sheet.TotalHours())
+	fmt.Printf("Total pay:\t\t%.2f\n", c.Sheet.TotalPay())
+	fmt.Printf("After tax earnings:\t$%.2f\n", c.Sheet.AfterTax())
 }

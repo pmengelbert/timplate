@@ -5,7 +5,6 @@ It will auto-calculate your total hours and your pay.
 
 ### Dependencies
 When compiling to pdf, you will need to install the `pdflatex` tool, usually found in the `texlive` package. 
-You will also need the `enumitem.sty` latex package, which is provided in this repository.
 
 ### Basic installation
 ```

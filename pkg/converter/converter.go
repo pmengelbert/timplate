@@ -69,8 +69,9 @@ func (c *Converter) loadInfileText() error {
 	if err != nil {
 		return fmt.Errorf("error reading file: %s\n", c.Infile)
 	}
+
 	c.InfileText = escapeRegex.ReplaceAll(c.InfileText, []byte("\\$1"))
-	return err
+	return nil
 }
 
 func (c *Converter) parseTemplate() {
@@ -91,19 +92,19 @@ func (c *Converter) parseYaml() error {
 				a[j] = strings.TrimSpace(a[j])
 			}
 
-			x, err := timesheet.Parse(a[0])
+			startTime, err := timesheet.Parse(a[0])
 			if err != nil {
 				return fmt.Errorf("error parsing time from timesheet.yaml: %s\n", a[0])
 			}
 
-			y, err := timesheet.Parse(a[1])
+			endTime, err := timesheet.Parse(a[1])
 			if err != nil {
 				return fmt.Errorf("error parsing time from timesheet.yaml: %s\n", a[1])
 			}
 
-			diff := y.DifferenceInHours(x)
+			diff := endTime.DifferenceInHours(startTime)
 			if diff < 0 {
-				return fmt.Errorf("bad time period: %v, %v\n", x, y)
+				return fmt.Errorf("bad time period: %v, %v\n", startTime, endTime)
 			}
 
 			c.Sheet.Records[i].TimeSum += diff
@@ -142,8 +143,7 @@ func (c *Converter) CompilePDF() error {
 	pdfFilename := strings.TrimSuffix(c.Outfile, path.Ext(c.Outfile)) + ".pdf"
 	err = os.Rename(outDirName+pdfFilename, pdfFilename)
 	if err != nil {
-		fmt.Println("error renaming file\n")
-		return err
+		return fmt.Errorf("error moving pdf file: %s\n", pdfFilename)
 	}
 
 	fmt.Println(string(str))

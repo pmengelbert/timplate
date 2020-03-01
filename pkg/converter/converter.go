@@ -107,6 +107,8 @@ func (c *Converter) parseYaml() error {
 				return fmt.Errorf("bad time period: %v, %v\n", startTime, endTime)
 			}
 
+			r.HourNumber += diff
+
 			c.Sheet.Records[i].TimeSum += diff
 		}
 	}

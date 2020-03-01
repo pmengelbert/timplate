@@ -15,20 +15,21 @@ type (
 	BulletList []string
 
 	Record struct {
-		Date        string     `json:"date"`
-		Hours       string     `json:"hours"`
+		Date        string `json:"date"`
+		Hours       string `json:"hours"`
+		HourNumber  float32
 		Description BulletList `json:"description"`
 		Times       BulletList `json:"times"`
 		TimeSum     float32
 	}
 
 	Sheet struct {
-		Name      string   `json:"name"`
-		Rate      int      `json:"rate"`
-		TaxRate   float64  `json:"taxRate"`
-		StartDate string   `json:"startDate"`
-		EndDate   string   `json:"endDate"`
-		Records   []Record `json:"records"`
+		Name      string    `json:"name"`
+		Rate      int       `json:"rate"`
+		TaxRate   float64   `json:"taxRate"`
+		StartDate string    `json:"startDate"`
+		EndDate   string    `json:"endDate"`
+		Records   []*Record `json:"records"`
 	}
 )
 

@@ -20,7 +20,7 @@ const (
                         << range $a, $b := $v.Times ->> 
                         << $b >>
                         << end ->>
-                        & << $v.Hours >> & 
+                        & << $v.HourNumber >> & 
                         \begin{itemize}[topsep=0pt] \itemsep0em
                         << range $x, $y := $v.Description ->> 
                                 \item << $y >>
